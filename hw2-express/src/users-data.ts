@@ -16,6 +16,6 @@ export class UsersData {
   }
 
   get(index?: number) {
-    return index ? this.users[index] : this.users;
+    return Number.isInteger(index) ? this.users[index!] : this.users;
   }
 }
