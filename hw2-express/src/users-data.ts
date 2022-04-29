@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import { resolve } from "path";
 import { User } from "./interfaces/user.interface";
 
-export class UserData {
+export class UsersData {
   private users: User[] = [];
 
   constructor() {
@@ -15,7 +15,7 @@ export class UserData {
     );
   }
 
-  get(index: number) {
+  get(index?: number) {
     return index ? this.users[index] : this.users;
   }
 }
