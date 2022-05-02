@@ -1,6 +1,5 @@
 import { Router } from 'express';
 
-import { HttpStatus } from '../common/enums/http-status.enum';
 import usersRoute from './users.route';
 
 export default {
@@ -11,8 +10,8 @@ export default {
 
     router.use((req, res, next) => {
       res
-        .status(HttpStatus.NOT_FOUND)
-        .json({ status: HttpStatus.NOT_FOUND, message: 'Not Found' });
+        .status(404)
+        .json({ status: 404, message: 'Not Found' });
     });
 
     return router;

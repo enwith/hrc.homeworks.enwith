@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 
-import { HttpStatus } from '../common/enums/http-status.enum';
 import { User } from '../common/interfaces/user.interface';
 import usersData from '../data/users.data';
 
@@ -13,17 +12,17 @@ export default {
       user = await usersData.create({ username });
     } catch (error) {
       return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .status(500)
         .json({ message: error.message });
     }
 
-    return res.status(HttpStatus.CREATED).json(user);
+    return res.status(201).json(user);
   },
 
   findAll(req: Request, res: Response) {
     const users: User[] = usersData.getAll();
 
-    return res.status(HttpStatus.OK).json(users);
+    return res.status(200).json(users);
   },
 
   find(req: Request, res: Response) {
@@ -32,11 +31,11 @@ export default {
     const user: User = usersData.findById(userId);
     if (!user) {
       return res
-        .status(HttpStatus.NOT_FOUND)
+        .status(404)
         .json({ message: 'User not found' });
     }
 
-    return res.status(HttpStatus.OK).json(user);
+    return res.status(200).json(user);
   },
 
   async update(req: Request, res: Response) {
@@ -48,11 +47,11 @@ export default {
       user = await usersData.update(userId, { username });
     } catch {
       return res
-        .status(HttpStatus.NOT_FOUND)
+        .status(404)
         .json({ message: 'User not found' });
     }
 
-    return res.status(HttpStatus.OK).json(user);
+    return res.status(200).json(user);
   },
 
   async delete(req: Request, res: Response) {
@@ -62,10 +61,10 @@ export default {
       await usersData.delete(userId);
     } catch {
       return res
-        .status(HttpStatus.NOT_FOUND)
+        .status(404)
         .json({ message: 'User not found' });
     }
 
-    return res.status(HttpStatus.OK).end();
+    return res.status(204).end();
   },
 };
