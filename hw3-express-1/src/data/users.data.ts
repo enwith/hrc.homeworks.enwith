@@ -1,40 +1,38 @@
-import { readFile, writeFile } from "fs/promises";
-import { User } from "../common/interfaces/user.interface";
-import { PATH_DATA_USERS } from "../constants";
+import { readFile, writeFile } from 'fs/promises';
+import { User } from '../common/interfaces/user.interface';
+import { PATH_DATA_USERS } from '../constants';
 
 class UsersData {
   public users: User[] = [];
 
-  constructor() {
+  public constructor() {
     this.init();
   }
 
-  private async init() {
+  private async init(): Promise<void> {
     const data = await readFile(PATH_DATA_USERS, 'utf-8');
-    const users = JSON.parse(data.toString());
+    const users: User[] = JSON.parse(data);
 
     this.users = users;
   }
 
-  private async save() {
-    return writeFile(
-      PATH_DATA_USERS,
-      JSON.stringify(this.users, null, 2),
-      'utf-8',
-    );
+  private async save(): Promise<void> {
+    const data = JSON.stringify(this.users, null, 2);
+
+    return writeFile(PATH_DATA_USERS, data, 'utf-8');
   }
 
-  getAll() {
+  public getAll(): User[] {
     return this.users;
   }
 
-  findById(id: string) {
-    return this.users.find((user) => user.id === id)!;
+  public findById(id: string): User | undefined {
+    return this.users.find((user) => user.id === id);
   }
 
-  async create(partial: Partial<User>) {
+  public async create(partial: Partial<User>): Promise<User> {
     const id = Math.random().toString(36).slice(2);
-    const user: User = Object.assign({}, partial, { id }) as User;
+    const user = Object.assign({}, partial, { id }) as User;
 
     this.users.push(user);
 
@@ -43,8 +41,8 @@ class UsersData {
     return user;
   }
 
-  async update(id: string, partial: Partial<User>) {
-    const user: User = this.findById(id);
+  public async update(id: string, partial: Partial<User>): Promise<User> {
+    const user = this.findById(id);
     if (!user) {
       throw new Error('User not exists');
     }
@@ -56,7 +54,7 @@ class UsersData {
     return user;
   }
 
-  async delete(id: string) {
+  public async delete(id: string): Promise<User> {
     if (!this.findById(id)) {
       throw new Error('User not exists');
     }

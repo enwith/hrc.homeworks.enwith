@@ -1,70 +1,65 @@
 import type { Request, Response } from 'express';
 
-import { User } from '../common/interfaces/user.interface';
 import usersData from '../data/users.data';
 
+export async function create(req: Request, res: Response): Promise<void> {
+  const { username } = req.body;
+
+  const user = await usersData.create({ username });
+
+  res.status(201).json(user);
+}
+
+export function findAll(req: Request, res: Response): void {
+  const users = usersData.getAll();
+
+  res.status(200).json(users);
+}
+
+export function find(req: Request, res: Response): void {
+  const { userId } = req.params;
+
+  const user = usersData.findById(userId);
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  res.status(200).json(user);
+}
+
+export async function update(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params;
+
+  let user = usersData.findById(userId);
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  user = await usersData.update(userId, req.body);
+
+  res.status(200).json(user);
+}
+
+export async function remove(req: Request, res: Response): Promise<void> {
+  const { userId } = req.params;
+
+  let user = usersData.findById(userId);
+  if (!user) {
+    res.status(404).json({ message: 'User not found' });
+    return;
+  }
+
+  user = await usersData.delete(userId);
+
+  res.status(200).json(user);
+}
+
 export default {
-  async create(req: Request, res: Response) {
-    const { username } = req.body;
-
-    let user: User;
-    try {
-      user = await usersData.create({ username });
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ message: error.message });
-    }
-
-    return res.status(201).json(user);
-  },
-
-  findAll(req: Request, res: Response) {
-    const users: User[] = usersData.getAll();
-
-    return res.status(200).json(users);
-  },
-
-  find(req: Request, res: Response) {
-    const { userId } = req.params;
-
-    const user: User = usersData.findById(userId);
-    if (!user) {
-      return res
-        .status(404)
-        .json({ message: 'User not found' });
-    }
-
-    return res.status(200).json(user);
-  },
-
-  async update(req: Request, res: Response) {
-    const { userId } = req.params;
-    const { username } = req.body;
-
-    let user: User;
-    try {
-      user = await usersData.update(userId, { username });
-    } catch {
-      return res
-        .status(404)
-        .json({ message: 'User not found' });
-    }
-
-    return res.status(200).json(user);
-  },
-
-  async delete(req: Request, res: Response) {
-    const { userId } = req.params;
-
-    try {
-      await usersData.delete(userId);
-    } catch {
-      return res
-        .status(404)
-        .json({ message: 'User not found' });
-    }
-
-    return res.status(204).end();
-  },
+  create,
+  findAll,
+  find,
+  update,
+  remove,
 };
