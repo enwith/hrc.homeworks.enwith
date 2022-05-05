@@ -1,4 +1,5 @@
 import { Document, Schema, model } from 'mongoose';
+
 import { Gender } from '../enums';
 import { IUser } from '../interfaces';
 import { isNumber } from '../util/types';
