@@ -23,9 +23,13 @@ const userFindAll: Handler = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     const users = await User.find().limit(limit).skip(skip).exec();
+    const count = await User.count();
 
     res.status(HttpStatus.OK).json({
+      page,
+      perPage: limit,
       data: users,
+      count,
     });
   } catch (err) {
     next(err);
