@@ -1,15 +1,6 @@
 import { Router } from 'express';
 
-// import {
-//   userCreate,
-//   userList,
-//   userGet,
-//   userUpdate,
-//   userDelete,
-// } from '../controllers/users.controller';
-
 import usersController from '../controllers/users.controller';
-
 import { validateUserId } from '../middlewares/users.middleware';
 
 export const path = '/users';
