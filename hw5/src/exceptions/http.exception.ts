@@ -1,16 +1,16 @@
 import { HttpStatus } from '../enums';
 import { isObject, isString } from '../util/types';
 
-export type HttpExceptionResponse = { [key: string]: any };
+export type HttpExceptionResponse = { [key: string]: string | number };
 
 export class HttpException extends Error {
   constructor(
     public status: HttpStatus,
     public response: HttpExceptionResponse,
   ) {
-    super(response.message);
+    super(response.message as string);
 
-    Error.captureStackTrace(this, this.constructor)
+    Error.captureStackTrace(this, this.constructor);
   }
 
   protected static prepare(

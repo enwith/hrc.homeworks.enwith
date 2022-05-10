@@ -17,9 +17,16 @@ const userCreate: Handler = async (req, res, next) => {
 
 const userFindAll: Handler = async (req, res, next) => {
   try {
-    const users = await User.find().exec();
+    const limit = parseInt(req.query.limit as string, 10) || 20;
+    const page = parseInt(req.query.page as string, 10) || 1;
 
-    res.status(HttpStatus.OK).json(users);
+    const skip = (page - 1) * limit;
+
+    const users = await User.find().limit(limit).skip(skip).exec();
+
+    res.status(HttpStatus.OK).json({
+      data: users,
+    });
   } catch (err) {
     next(err);
   }
