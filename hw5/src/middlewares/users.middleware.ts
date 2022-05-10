@@ -1,14 +1,10 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { Handler } from 'express';
 import { Types } from 'mongoose';
 
 import { BadRequestException, ConflictException } from '../exceptions';
 import { User } from '../models';
 
-export async function checkUniqueEmail(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
+const userCheckUniqueEmail: Handler = async (req, res, next) => {
   try {
     const { email } = req.body;
 
@@ -21,13 +17,9 @@ export async function checkUniqueEmail(
   } catch (err) {
     next(err);
   }
-}
+};
 
-export async function validateUserId(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+const userValidateObjectId: Handler = (req, res, next) => {
   try {
     const { userId } = req.params;
 
@@ -40,4 +32,9 @@ export async function validateUserId(
   } catch (err) {
     next(err);
   }
-}
+};
+
+export default {
+  userCheckUniqueEmail,
+  userValidateObjectId,
+};
