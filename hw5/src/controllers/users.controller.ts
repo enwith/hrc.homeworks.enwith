@@ -25,7 +25,7 @@ const userFindAll: Handler = async (req, res, next) => {
     const users = await User.find().limit(limit).skip(skip).exec();
     const count = await User.count();
 
-    res.status(HttpStatus.OK).json({
+    res.json({
       page,
       perPage: limit,
       data: users,
@@ -45,7 +45,7 @@ const userFind: Handler = async (req, res, next) => {
       throw new NotFoundException('User not found');
     }
 
-    res.status(HttpStatus.OK).json(user);
+    res.json(user);
   } catch (err) {
     next(err);
   }
@@ -62,7 +62,7 @@ const userModify: Handler = async (req, res, next) => {
       throw new NotFoundException('User not found');
     }
 
-    res.status(HttpStatus.OK).json(user);
+    res.json(user);
   } catch (err) {
     next(err);
   }
